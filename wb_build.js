@@ -104,10 +104,9 @@ async function dropOption(){
   const b=r.querySelector('button[aria-label="옵션 삭제"]');
   if(!b)return 'no-option';
   b.click();await sleep(1000);
-  const pool=[...r.querySelectorAll('button'),...document.querySelectorAll('button')];
-  const ok=pool.find(x=>x.textContent.trim()==='삭제'&&x.getBoundingClientRect().width>0);
+  let ok=null;for(let k=0;k<8&&!ok;k++){const p=document.querySelector('bo-shopping-product-portal');if(p&&p.shadowRoot)ok=[...p.shadowRoot.querySelectorAll('button')].find(x=>x.textContent.trim()==='삭제');if(!ok)await sleep(500);}
   if(!ok)return 'no-confirm';
-  ok.click();await sleep(1200);
+  ok.click();await sleep(1500);
   return r.querySelector('button[aria-label="옵션 삭제"]')?'still':'dropped';
 }
 function save(){[...root().querySelectorAll('button')].find(x=>x.textContent.trim()==='저장').click();return 1}
