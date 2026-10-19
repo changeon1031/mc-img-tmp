@@ -96,6 +96,20 @@ async function pass2(idx){
   const b=e1html(s,c,I,E1.html.get());E1.html.set(b.html);E1.events.trigger('contentChanged');
   return 'OK '+I.join(',')+' | '+JSON.stringify(b.log);
 }
+async function dropOption(){
+  const r=root();
+  const h=[...r.querySelectorAll('[data-section-title]')].find(e=>/^옵션/.test(e.textContent.trim()));
+  if(h.getAttribute('aria-expanded')!=='true')h.click();
+  await sleep(1200);
+  const b=r.querySelector('button[aria-label="옵션 삭제"]');
+  if(!b)return 'no-option';
+  b.click();await sleep(1000);
+  const pool=[...r.querySelectorAll('button'),...document.querySelectorAll('button')];
+  const ok=pool.find(x=>x.textContent.trim()==='삭제'&&x.getBoundingClientRect().width>0);
+  if(!ok)return 'no-confirm';
+  ok.click();await sleep(1200);
+  return r.querySelector('button[aria-label="옵션 삭제"]')?'still':'dropped';
+}
 function save(){[...root().querySelectorAll('button')].find(x=>x.textContent.trim()==='저장').click();return 1}
-return {P,who,pass1,pass2,ids,save,e0html,e1html};
+return {P,who,dropOption,pass1,pass2,ids,save,e0html,e1html};
 })();
